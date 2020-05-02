@@ -62,6 +62,47 @@ struct AnyViewContentView: View {
     }
 }
 
+struct CoreDataContentView: View {
+    @FetchRequest(entity: Student.entity(), sortDescriptors: []) var students: FetchedResults<Student>
+    
+    @Environment(\.managedObjectContext) var moc
+    
+    /// Integrating CoreData in swiftUI is dumb easy and makes me sad we've never done it before.
+    
+    var body: some View {
+        VStack {
+            List {
+                ForEach(students, id: \.id) {
+                    Text($0.name ?? "Unknown")
+                }
+            }
+            Button("Add") {
+                let firstNames = ["Ginny", "Harry", "Hermione", "Luna", "Ron"]
+                let lastNames = ["Granger", "Lovegood", "Potter", "Weasley"]
+                
+                let chosenFirstName = firstNames.randomElement()!
+                let chosenLastName = lastNames.randomElement()!
+                
+                let student = Student(context: self.moc)
+                student.id = UUID()
+                student.name = "\(chosenFirstName) \(chosenLastName)"
+                
+                try? self.moc.save()
+            }
+        }
+    }
+}
+
+struct AddBookView {
+    @Environment(\.managedObjectContext) var moc
+    
+    @State private var title = ""
+    @State private var author = ""
+    @State private var rating = 3
+    @State private var genre = ""
+    @State private var review = ""
+}
+
 struct ContentView: View {
     var body: some View {
         Text("Hello World!")
