@@ -40,6 +40,28 @@ struct BindingContentView: View {
     }
 }
 
+struct AnyViewContentView: View {
+    /// AnyView allows us to use type-erasure so SwiftUI believes we're just returning a simple view.  Howevers with it comes a performance impact.  Since SwiftUI doesn't know what exists afterwards.
+    
+    @Environment(\.horizontalSizeClass) var sizeClass
+    
+    var body: some View {
+        if sizeClass == .compact {
+            return AnyView(VStack {
+                Text("Active size class:")
+                Text("Compact")
+            }
+            .font(.largeTitle))
+        } else {
+            return AnyView(HStack {
+                Text("Active size class:")
+                Text("REGULAR")
+            }
+            .font(.largeTitle))
+        }
+    }
+}
+
 struct ContentView: View {
     var body: some View {
         Text("Hello World!")
