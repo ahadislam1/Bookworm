@@ -21,7 +21,26 @@ struct RatingView: View {
     var onColor = Color.yellow
     
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        HStack {
+            if !label.isEmpty {
+                Text(label)
+            }
+            ForEach(1..<maximumRating + 1) { number in
+                self.image(for: number)
+                    .foregroundColor(number > self.rating ? self.offColor : self.onColor)
+                    .onTapGesture {
+                        self.rating = number
+                }
+            }
+        }
+    }
+    
+    func image(for number: Int) -> Image {
+        if number > rating {
+            return offImage ?? onImage
+        } else {
+            return onImage
+        }
     }
 }
 
