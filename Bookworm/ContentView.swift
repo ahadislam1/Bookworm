@@ -101,7 +101,23 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
-            Text("Count: \(books.count)")
+            List {
+                ForEach(books, id: \.self) { book in
+                    NavigationLink(destination: Text(book.title ?? "title")) {
+                        EmojiRatingView(rating: book.rating)
+                            .font(.largeTitle)
+                        
+                        VStack(alignment: .leading) {
+                            Text(book.title ?? "title")
+                                .font(.headline)
+                            Text(book.author ?? "author")
+                                .foregroundColor(.secondary)
+                        }
+                        
+                    }
+                }
+            }
+                
                 .navigationBarTitle("Bookworm")
                 .navigationBarItems(trailing: Button(action: {
                     self.showingAddScreen.toggle()
